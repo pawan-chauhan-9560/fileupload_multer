@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Upload</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      color: #fff;
+    }
+
+    .upload-container {
+      background: #fff;
+      color: #333;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+      animation: slideIn 0.5s ease-out;
+    }
+
+    @keyframes slideIn {
+      0% { opacity: 0; transform: translateY(-30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .upload-container h1 {
+      font-size: 2.2em;
+      margin-bottom: 15px;
+      color: #6a11cb;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .upload-container p {
+      font-size: 1em;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .drag-area {
+      border: 2px dashed #6a11cb;
+      border-radius: 12px;
+      padding: 30px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      position: relative;
+    }
+
+    .drag-area::before {
+      content: '\f07b'; /* Font Awesome icon */
+      font-family: 'FontAwesome';
+      font-size: 3em;
+      color: #6a11cb;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .drag-area:hover {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      border-color: transparent;
+      transform: scale(1.05);
+    }
+
+    .drag-area p {
+      margin: 0;
+      font-size: 1.2em;
+      color: #6a11cb;
+      font-weight: 600;
+      position: relative;
+      z-index: 1;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .custom-file-input {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: #fff;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 30px;
+      font-size: 1.1em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .custom-file-input:hover {
+      background: linear-gradient(135deg, #2575fc, #6a11cb);
+      transform: scale(1.05);
+    }
+
+    img {
+      margin-top: 20px;
+      max-width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 600px) {
+      .upload-container {
+        padding: 20px;
+      }
+
+      .upload-container h1 {
+        font-size: 1.8em;
+      }
+
+      .custom-file-input {
+        width: 100%;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="upload-container">
+    <h1>Upload Your File</h1>
+    <p>Select a file to upload or drag it into the area below</p>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+      <div class="drag-area" onclick="document.getElementById('fileInput').click()">
+        <p>Drag & Drop or Click to Upload</p>
+      </div>
+      <input type="file" id="fileInput" class="file-input" name="profileImage">
+      <br><br>
+      <button type="submit" class="custom-file-input">Upload File</button>
+    </form>
+    <% if (typeof fileUrl !== "undefined") { %>
+      <h2 style="margin-top: 20px; color: #6a11cb;">Uploaded Image:</h2>
+      <img src="<%= fileUrl %>" alt="Uploaded Image">
+    <% } %>
+  </div>
+
+  <script>
+    const dragArea = document.querySelector('.drag-area');
+    const fileInput = document.getElementById('fileInput');
+
+    dragArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dragArea.style.background = "rgba(106, 17, 203, 0.2)";
+    });
+
+    dragArea.addEventListener('dragleave', () => {
+      dragArea.style.background = "transparent";
+    });
+
+    dragArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dragArea.style.background = "transparent";
+      fileInput.files = e.dataTransfer.files;
+    });
+  </script>
+</body>
+</html>
